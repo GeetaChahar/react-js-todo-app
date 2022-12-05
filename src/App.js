@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 
+const getLocalItems = () => {
+  let todo = localStorage.getItem('todos');
+
+
+  if (todo) {
+    return JSON.parse(localStorage.getItem('todos'));
+  } else {
+    return ([]);
+  }
+}
+
 const App = () => {
 
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(getLocalItems());
   const [editId, setEditId] = useState(0);
 
   const handleSubmit = (e) => {
@@ -41,6 +52,10 @@ const App = () => {
     setTodo(editTodo.todo);
     setEditId(id);
   };
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos]);
 
   return (
     <div className='App' >
